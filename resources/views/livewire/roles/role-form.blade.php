@@ -1,7 +1,7 @@
 <div>
     @if($showModal)
         <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" wire:click="closeModal">
-            <div class="relative top-8 mx-auto p-6 border w-full max-w-4xl shadow-lg rounded-md bg-white" wire:click.stop>
+            <div class="relative top-8 mx-auto p-6 border w-full max-w-4xl shadow-lg rounded-md bg-white" @click.stop>
                 <div class="mt-3">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-semibold text-gray-900">
@@ -113,7 +113,7 @@
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('openRoleForm', (event) => {
-            @this.openModal(event.roleId);
+            @this.openModal(event?.roleId || null);
         });
     });
 </script>

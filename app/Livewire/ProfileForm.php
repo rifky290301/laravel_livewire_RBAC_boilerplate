@@ -2,44 +2,53 @@
 
 namespace App\Livewire;
 
+use App\Domains\User\Models\User;
 use App\Shared\Traits\WithAlerts;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ProfileForm extends Component
 {
-    use WithAlerts;
+  use WithAlerts;
 
-    public $name = '';
-    public $email = '';
+  public $name = '';
+  public $email = '';
 
-    public function mount()
-    {
-        $user = Auth::user();
-        $this->name = $user->name ?? '';
-        $this->email = $user->email ?? '';
-    }
+  public function mount()
+  {
+    $user = Auth::user();
+    $this->name = $user->name ?? '';
+    $this->email = $user->email ?? '';
+  }
 
-    public function updateProfile()
-    {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
-        ]);
+  public function resetForm()
+  {
+    $user = Auth::user();
+    $this->name = $user->name ?? '';
+    $this->email = $user->email ?? '';
+  }
 
-        $user = Auth::user();
-        
-        $user->update([
-            'name' => $this->name,
-            'email' => $this->email,
-        ]);
+  public function updateProfile()
+  {
+    $this->validate([
+      'name' => 'required|string|max:255',
+      'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+    ]);
 
-        $this->showSuccessToast('Profile updated successfully!');
-        $this->dispatch('$refresh');
-    }
+    /** @var User $user */
+    $user = Auth::user();
 
-    public function render()
-    {
-        return view('livewire.profile-form');
-    }
+    $user->update([
+      'name' => $this->name,
+      'email' => $this->email,
+    ]);
+
+    $this->showSuccessToast('Profile updated successfully!');
+    $this->dispatch('$refresh');
+  }
+
+  public function render()
+  {
+    return view('livewire.profile-form');
+  }
 }
